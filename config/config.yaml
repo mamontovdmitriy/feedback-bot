@@ -1,0 +1,12 @@
+app:
+  name: 'Служба поддержки клиентов'
+
+http:
+  port: 8080
+
+log:
+  level: 'debug'
+
+postgres:
+  max_pool_size: 20
+  url: ~
