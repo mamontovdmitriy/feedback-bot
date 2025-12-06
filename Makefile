@@ -23,13 +23,13 @@ migrate-create: ### Create new migration
 	migrate create -ext sql -dir migrations 'support_bot'
 .PHONY: migrate-create
 
-migrate-up: ### Migration up
-	migrate -path migrations -database '$(PG_URL_LOCALHOST)?sslmode=disable' up
-.PHONY: migrate-up
+# migrate-up: ### Migration up
+# 	migrate -path migrations -database '$(PG_URL_LOCALHOST)?sslmode=disable' up
+# .PHONY: migrate-up
 
-migrate-down: ### Migration down
-	echo "y" | migrate -path migrations -database '$(PG_URL_LOCALHOST)?sslmode=disable' down
-.PHONY: migrate-down
+# migrate-down: ### Migration down
+# 	echo "y" | migrate -path migrations -database '$(PG_URL_LOCALHOST)?sslmode=disable' down
+# .PHONY: migrate-down
 
 test: ### Run tests
 	go test -v ./...

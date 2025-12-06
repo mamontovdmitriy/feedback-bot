@@ -1,0 +1,42 @@
+
+volumes:
+  pg_data: 
+
+services:
+  postgres:
+    # container_name: postgres
+    image: postgres:alpine
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_HOST=${POSTGRES_HOST}
+      - POSTGRES_PORT=${POSTGRES_PORT}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
+    ports:
+      - "${POSTGRES_PORT}:${POSTGRES_PORT}"
+    healthcheck:
+      test: ["CMD-SHELL", "sh -c 'pg_isready -U postgres -d postgres'"]
+      interval: 5s
+      timeout: 10s
+      retries: 5
+      start_period: 10s
+    restart: unless-stopped
+
+  tg-bot:
+    # container_name: tg-bot
+    build: .
+    environment:
+      - PG_URL=${PG_URL}
+      - HTTP_PORT=${HTTP_PORT}
+      - TG_TOKEN=${TG_TOKEN}
+      - TG_SUPERGROUP_ID=${TG_SUPERGROUP_ID}
+      - LOG_LEVEL=${LOG_LEVEL}
+      - APP_NAME=${APP_NAME}
+    ports:
+      - "${HTTP_PORT}:${HTTP_PORT}"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
