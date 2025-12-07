@@ -59,7 +59,10 @@ func (c *Handler) proxyMessage(message *tg.Message) {
 		_, err := c.CreateForumTopic(userId, name)
 		if err != nil {
 			c.services.Log.Errorf("Handler.proxyMessage: error creating forum topic - %v", err)
-			// todo show resend button
+
+			// show error
+			text := fmt.Sprintf("%s (ID: %d)", err.Error(), c.cfg.SupergroupId)
+			c.SendTemplate(message.Chat.ID, "msg-error-bad-config.html", struct{ Message string }{Message: text})
 			return
 		}
 
