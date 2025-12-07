@@ -28,7 +28,7 @@ func Run(configPath string) {
 	}
 
 	// miniapp for health checking
-	healthcheck(cfg.Port)
+	healthcheck(cfg.HTTP.Port)
 
 	// Logger
 	log := initLogger(cfg.Log.Level)
