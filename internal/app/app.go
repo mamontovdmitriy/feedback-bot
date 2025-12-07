@@ -31,18 +31,8 @@ func Run(configPath string) {
 	healthcheck(cfg.Port)
 
 	// Logger
-	log := logrus.New()
-	logrusLevel, err := logrus.ParseLevel(cfg.Log.Level)
-	if err != nil {
-		log.SetLevel(logrus.DebugLevel)
-	} else {
-		log.SetLevel(logrusLevel)
-	}
-	log.SetFormatter(&logrus.JSONFormatter{
-		TimestampFormat: "2006-01-02 15:04:05",
-	})
-	log.SetOutput(os.Stdout)
-	log.Info("Init application...")
+	log := initLogger(cfg.Log.Level)
+	log.Info("Configuration and logger initialization completed successfully.")
 
 	// DB
 	log.Info("Init postgres...")
@@ -94,6 +84,23 @@ func Run(configPath string) {
 		log.Fatal("Server forced to shutdown:", err)
 	}
 	log.Info("Server stopped")
+}
+
+func initLogger(logLevel string) *logrus.Logger {
+	log := logrus.New()
+
+	logrusLevel, err := logrus.ParseLevel(logLevel)
+	if err != nil {
+		log.SetLevel(logrus.DebugLevel)
+	} else {
+		log.SetLevel(logrusLevel)
+	}
+	log.SetFormatter(&logrus.JSONFormatter{
+		TimestampFormat: "2006-01-02 15:04:05",
+	})
+	log.SetOutput(os.Stdout)
+
+	return log
 }
 
 /**
